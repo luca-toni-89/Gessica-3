@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Für dich ❤️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg1: #020617;
+      --bg2: #0b1120;
+      --accent1: #ec4899;
+      --accent2: #fb7185;
+      --accent3: #22c55e;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top, #020617, #020617 40%, #0b1120 100%);
+      overflow: hidden;
+      padding: 16px;
+    }
+
+    /* sanfter Glow-Nebel */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(236,72,153,0.4), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(248,113,113,0.4), transparent 55%),
+        radial-gradient(circle at 0% 100%, rgba(96,165,250,0.35), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(52,211,153,0.35), transparent 55%);
+      opacity: 0.3;
+      filter: blur(70px);
+      animation: bgGlow 26s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgGlow {
+      0%   { transform: translate3d(0,0,0) scale(1); }
+      50%  { transform: translate3d(-30px,-20px,0) scale(1.1); }
+      100% { transform: translate3d(25px,25px,0) scale(1.03); }
+    }
+
+    /* dezentes Grid */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(
+          rgba(148, 163, 184, 0.05) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(148, 163, 184, 0.05) 1px,
+          transparent 1px
+        );
+      background-size: 44px 44px;
+      opacity: 0.4;
+      pointer-events: none;
+      animation: gridMove 40s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes gridMove {
+      0%   { transform: translate3d(0,0,0); }
+      50%  { transform: translate3d(-50px,-50px,0); }
+      100% { transform: translate3d(0,0,0); }
+    }
+
+    /* schwebende Herzen */
+    .floating-hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 22px;
+      opacity: 0;
+      animation: floatHeart 12s linear infinite;
+    }
+
+    .heart:nth-child(1) { left: 10%; bottom: -10%; animation-delay: 0s; }
+    .heart:nth-child(2) { left: 25%; bottom: -10%; animation-delay: 3s; }
+    .heart:nth-child(3) { left: 50%; bottom: -10%; animation-delay: 6s; }
+    .heart:nth-child(4) { left: 70%; bottom: -10%; animation-delay: 1.5s; }
+    .heart:nth-child(5) { left: 85%; bottom: -10%; animation-delay: 4.5s; }
+
+    @keyframes floatHeart {
+      0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+      10%  { opacity: 1; }
+      60%  { transform: translateY(-60vh) scale(1.1); opacity: 0.8; }
+      100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card {
+      position: relative;
+      width: min(520px, 100%);
+      margin-inline: auto;
+      background:
+        radial-gradient(circle at top left, rgba(236,72,153,0.3), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(96,165,250,0.35), transparent 60%),
+        rgba(15,23,42,0.92);
+      border-radius: 26px;
+      padding: 22px 18px 18px;
+      box-shadow:
+        0 26px 60px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(248, 250, 252, 0.08);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(
+        from 140deg,
+        rgba(236,72,153,0),
+        rgba(236,72,153,0.8),
+        rgba(248,113,113,0.9),
+        rgba(56,189,248,0.85),
+        rgba(236,72,153,0)
+      );
+      opacity: 0.16;
+      animation: cardGlow 26s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes cardGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.7);
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent1);
+      box-shadow: 0 0 0 4px rgba(236,72,153,0.35);
+      animation: pulseDot 2.2s ease-out infinite;
+    }
+
+    @keyframes pulseDot {
+      0%   { transform: scale(1); opacity: 1; }
+      60%  { transform: scale(1.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+      font-size: 22px;
+      text-align: center;
+      margin-bottom: 6px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .hero-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 999px;
+      border: 1px solid rgba(248,250,252,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      background: radial-gradient(circle at 30% 20%, #fee2e2, #fb7185);
+      box-shadow:
+        0 12px 32px rgba(15,23,42,0.8),
+        0 0 0 6px rgba(248,113,113,0.35);
+      animation: avatarPulse 3.6s ease-in-out infinite;
+    }
+
+    @keyframes avatarPulse {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-4px); }
+    }
+
+    .small-text {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(15,23,42,0.88);
+      border: 1px solid rgba(148,163,184,0.4);
+      color: var(--text-muted);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent3);
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.32);
+      animation: pulseDot 2s ease-out infinite;
+    }
+
+    /* Comic-Panel */
+    .panel {
+      margin-top: 4px;
+      padding: 14px 12px 12px;
+      border-radius: 20px;
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.16), transparent 60%),
+                  rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .panel-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+    }
+
+    .panel-step {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .panel-main {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    @media (max-width: 480px) {
+      .panel-main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-visual {
+      position: relative;
+      border-radius: 18px;
+      padding: 3px;
+      background: conic-gradient(
+        from 220deg,
+        rgba(236,72,153,0.9),
+        rgba(248,113,113,0.9),
+        rgba(96,165,250,0.9),
+        rgba(236,72,153,0.9)
+      );
+      overflow: hidden;
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.85);
+    }
+
+    .panel-visual-inner {
+      position: relative;
+      border-radius: 14px;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .panel-emoji {
+      font-size: 40px;
+      animation: floatEmoji 3.4s ease-in-out infinite;
+    }
+
+    @keyframes floatEmoji {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%     { transform: translateY(-6px) scale(1.05); }
+    }
+
+    .panel-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+      display: none;
+    }
+
+    .panel-text-block {
+      position: relative;
+    }
+
+    .panel-headline {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .panel-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-main);
+      opacity: 0.94;
+    }
+
+    .panel-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* EXTRA: Bild-Platzhalter pro Kapitel */
+    .panel-extra {
+      margin-top: 10px;
+    }
+
+    .panel-extra-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .panel-extra-frame {
+      border-radius: 14px;
+      border: 1px dashed rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.85);
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 80px;
+      text-align: center;
+    }
+
+    #panelExtraImage {
+      max-width: 100%;
+      max-height: 180px;
+      border-radius: 10px;
+      display: none;
+      object-fit: cover;
+    }
+
+    #panelExtraPlaceholder {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Dots */
+    .dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 14px;
+      margin-bottom: 8px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.5);
+      transition: transform 0.2s ease-out, background 0.2s ease-out;
+    }
+
+    .dot.active {
+      background: #f97373;
+      transform: scale(1.3);
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, background 0.12s ease-out;
+    }
+
+    .btn span.icon {
+      font-size: 15px;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(15,23,42,0.9);
+      background: rgba(15,23,42,0.98);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 16px rgba(15,23,42,0.85);
+    }
+
+    .btn-primary {
+      border: none;
+      background: linear-gradient(135deg, #ec4899, #fb7185);
+      box-shadow:
+        0 14px 30px rgba(248,113,113,0.7),
+        0 0 0 1px rgba(248, 250, 252, 0.12);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #fb7185, #ec4899);
+      box-shadow:
+        0 18px 38px rgba(248,113,113,0.9),
+        0 0 0 1px rgba(248, 250, 252, 0.16);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow:
+        0 10px 24px rgba(248,113,113,0.7),
+        0 0 0 1px rgba(248, 250, 252, 0.12);
+    }
+
+    .btn[disabled] {
+      opacity: 0.4;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* Slide Animation */
+    .panel-animated {
+      animation: panelIn 0.45s ease-out;
+    }
+
+    @keyframes panelIn {
+      0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Finale-Overlay */
+    .finale-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.95), rgba(15,23,42,0.98));
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+      z-index: 5;
+    }
+
+    .finale-overlay.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .finale-inner {
+      text-align: center;
+      width: min(420px, 100% - 32px);
+      padding: 22px 18px 18px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(236,72,153,0.4), transparent 60%),
+        rgba(15,23,42,0.96);
+      box-shadow:
+        0 26px 70px rgba(0,0,0,0.9),
+        0 0 0 1px rgba(248,250,252,0.14);
+      backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .finale-emoji {
+      font-size: 46px;
+      margin-bottom: 10px;
+      animation: floatEmoji 3s ease-in-out infinite;
+    }
+
+    .finale-title {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .finale-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .finale-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .finale-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ec4899, #fb7185);
+      color: white;
+      box-shadow:
+        0 14px 30px rgba(248,113,113,0.7),
+        0 0 0 1px rgba(248, 250, 252, 0.12);
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s;
+    }
+
+    .finale-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow:
+        0 18px 40px rgba(248,113,113,0.9),
+        0 0 0 1px rgba(248, 250, 252, 0.16);
+    }
+
+    .finale-btn:active {
+      transform: translateY(0);
+      filter: brightness(0.97);
+      box-shadow:
+        0 10px 24px rgba(248,113,113,0.7),
+        0 0 0 1px rgba(248, 250, 252, 0.12);
+    }
+
+    .finale-hearts {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      font-size: 24px;
+      opacity: 0.8;
+    }
+
+    .finale-heart {
+      position: absolute;
+      animation: finalePop 2.6s ease-out infinite;
+    }
+
+    .finale-heart:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+    .finale-heart:nth-child(2) { top: 20%; right: 12%; animation-delay: 0.6s; }
+    .finale-heart:nth-child(3) { bottom: 18%; left: 15%; animation-delay: 1.2s; }
+    .finale-heart:nth-child(4) { bottom: 10%; right: 18%; animation-delay: 1.8s; }
+
+    @keyframes finalePop {
+      0%   { transform: scale(0.5) translateY(10px); opacity: 0; }
+      30%  { transform: scale(1.1) translateY(0); opacity: 1; }
+      100% { transform: scale(1.0) translateY(-10px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <div class="floating-hearts">
+    <div class="heart">💗</div>
+    <div class="heart">💖</div>
+    <div class="heart">💘</div>
+    <div class="heart">💞</div>
+    <div class="heart">💕</div>
+  </div>
+
+  <div class="app">
+    <div class="card">
+      <div class="card-inner">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          Kleine geführte Liebesgeschichte
+        </div>
+
+        <h1>Für dich 💌</h1>
+        <div class="subtitle">
+          Klick dich durch – Schritt für Schritt erzähle ich dir,
+          was du mir bedeutest.
+        </div>
+
+        <div class="hero-row">
+          <div>
+            <div class="avatar" id="avatarEmoji">💘</div>
+          </div>
+          <div>
+            <div class="small-text">Status</div>
+            <div style="height:6px;"></div>
+            <div class="status">
+              <span class="status-dot"></span>
+              Unsere Geschichte läuft gerade...
+            </div>
+          </div>
+        </div>
+
+        <div id="panel" class="panel panel-animated">
+          <div class="panel-header">
+            <div class="panel-title">Kapitel <span id="panelChapter">1</span></div>
+            <div class="panel-step" id="panelStepText">Seite 1 von 8</div>
+          </div>
+
+          <div class="panel-main">
+            <div class="panel-visual">
+              <div class="panel-visual-inner">
+                <div id="panelEmoji" class="panel-emoji">✨</div>
+                <img id="panelImage" class="panel-image" alt="Bild">
+              </div>
+            </div>
+            <div class="panel-text-block">
+              <div id="panelHeadline" class="panel-headline">
+                Überschrift
+              </div>
+              <div id="panelText" class="panel-text">
+                Text
+              </div>
+              <div id="panelNote" class="panel-note">
+                Zusatz
+              </div>
+
+              <!-- Bild-Platzhalter pro Kapitel -->
+              <div class="panel-extra">
+                <div class="panel-extra-label">Kapitel-Bild</div>
+                <div class="panel-extra-frame">
+                  <img id="panelExtraImage" alt="Kapitelbild" />
+                  <div id="panelExtraPlaceholder">
+                    Hier kannst du später ein Bild von uns einfügen.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="dots" id="dotsContainer"></div>
+
+        <div class="buttons">
+          <button id="prevBtn" class="btn" disabled>
+            <span class="icon">⬅️</span>
+            Zurück
+          </button>
+          <button id="nextBtn" class="btn btn-primary">
+            Weiter
+            <span class="icon">➡️</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Finale Overlay -->
+  <div id="finaleOverlay" class="finale-overlay">
+    <div class="finale-inner">
+      <div class="finale-hearts">
+        <div class="finale-heart">💗</div>
+        <div class="finale-heart">💖</div>
+        <div class="finale-heart">💘</div>
+        <div class="finale-heart">💕</div>
+      </div>
+      <div class="finale-emoji">💞</div>
+      <div class="finale-title">Danke, dass du das gelesen hast.</div>
+      <div class="finale-name" id="finaleName">Ich liebe dich. 🫶</div>
+      <div class="finale-text">
+        Du bist mein Lieblingsmensch.  
+        Mit dir fühlt sich sogar ein ganz normaler Tag wie etwas Besonderes an.  
+        Und tief in mir weiss ich: Eines Tages werde ich dich heiraten – weil du die Richtige für mich bist.
+      </div>
+      <button id="closeFinaleBtn" class="finale-btn">
+        Nochmal von vorne ansehen 🔁
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Optional: hier ihren Namen eintragen, z.B. "Gessi"
+    const herName = ""; // z.B. "Gessi"
+
+    const slides = [
+      {
+        // 1: Wie alles begonnen hat – Ferien + 2 Wochen schreiben + von Anfang an richtig
+        title: "Wie alles begonnen hat",
+        text: "Wir haben uns genau in dem Moment kennengelernt, als du in die Ferien gegangen bist. Und trotzdem – oder vielleicht gerade deshalb – haben wir zwei Wochen lang jeden Tag miteinander geschrieben. Von Anfang an war da dieses Gefühl, dass etwas Besonderes zwischen uns ist. Es hat sich sofort richtig angefühlt, als würde ich dich schon ewig kennen, als wärst du schon immer an meiner Seite gewesen – dabei hatten wir uns gerade erst kennengelernt.",
+        note: "Damals hätte ich nie gedacht, wie wichtig du mir einmal wirst.",
+        emoji: "✨",
+        image: "",
+        extraImage: "",
+        extraSuggestion: "Hier passt ein Bild von deinen Ferien oder ein Foto aus dieser Zeit."
+      },
+      {
+        // 2: Erstes Treffen + Kuss + alles richtig
+        title: "Unser erster Abend",
+        text: "Kaum warst du zurückgelandet, haben wir uns getroffen. Kein langes Zögern, kein Abwarten. Am ersten Abend ist schon ein Kuss gefallen – und wieder war diese Verbindung so deutlich zu spüren. Es war, als würde etwas, das längst da war, endlich einen Platz bekommen. Alles war so zwanglos, vertraut und einfach nur richtig.",
+        note: "Ich weiss noch genau, wie sich dieser Moment angefühlt hat.",
+        emoji: "💫",
+        image: "",
+        extraImage: "",
+        extraSuggestion: "Hier kannst du ein Bild von uns oder etwas Symbolisches für diesen ersten Abend einfügen."
+      },
+      {
+        // 3: Lieblingsmoment – Ruhe, Nähe, Lachen
+        title: "Mein Lieblingsmoment mit dir",
+        text: "Es gibt so viele Momente, die ich mit dir liebe. Aber einer sticht heraus: dieses Gefühl von Ruhe, Nähe und Lachen, wenn wir einfach nur wir sind – ohne Programm, ohne Druck. Mit dir kann selbst ein ganz normaler Abend der schönste Ort der Welt sein.",
+        note: "Diese Abende bedeuten mir mehr, als ich in Worte fassen kann.",
+        emoji: "🌙",
+        image: "",
+        extraImage: "",
+        extraSuggestion: "Hier passt ein Bild von einem Abend zu zweit – Sofa, Kerzen, Lieblingsessen."
+      },
+      {
+        // 4: Was er an ihr bewundert
+        title: "Was ich an dir bewundere",
+        text: "Ich bewundere deine einfühlsame Art und dass du die Nähe zu mir suchst. Dass du immer wieder die Kraft findest, für mich da zu sein – sogar dann, wenn du es selber stressig hast. Du hast ein grosses Herz. Ich liebe alles an dir: dein Lachen, deine Augen und allein schon deine Anwesenheit.",
+        note: "Du siehst oft gar nicht, wie viel Licht du in mein Leben bringst.",
+        emoji: "💖",
+        image: "",
+        extraImage: "",
+        extraSuggestion: "Hier kannst du ein Bild von dir einfügen – vielleicht eins, auf dem du lachst."
+      },
+      {
+        // 5: Wie ich mich mit dir fühle – angekommen, Safe Space
+        title: "Wie ich mich mit dir fühle",
+        text: "Mit dir fühle ich mich gesehen. Ich weiss, ich bin angekommen. Du gibst mir das Gefühl, dass ich genau richtig so bin, wie ich bin – und das ist selten und kostbar. Du bist mein Safe Space, egal wo wir sind.",
+        note: "Bei dir kann ich einfach ich selbst sein.",
+        emoji: "🤍",
+        image: "",
+        extraImage: "",
+        extraSuggestion: "Hier passt ein ruhiges, weiches Bild – vielleicht ein Ort, an dem wir uns besonders wohl fühlen."
+      },
+      {
+        // 6: Wenn du nicht bei mir bist – getrennte Wohnungen, Vermissen
+        title: "Wenn du nicht bei mir bist",
+        text: "Auch wenn wir noch getrennt wohnen, fühlt es sich für mich oft so an, als wäre mein Platz immer dort, wo du bist. Ich leide, wenn du nicht bei mir bist. Ich vermisse dich extrem und würde dich am liebsten immer bei mir haben. Manche Abende sind nur halb so hell, wenn du nicht da bist – weil ein Teil von mir immer bei dir ist.",
+        note: "Mein Herz ist bei dir, auch wenn wir gerade nicht am gleichen Ort sind.",
+        emoji: "🌙",
+        image: "",
+        extraImage: "",
+        extraSuggestion: "Hier kannst du ein Bild von zwei Orten einfügen – oder etwas, das für Abstand und Nähe gleichzeitig steht."
+      },
+      {
+        // 7: Gespräche, die Liebe nähren + Rituale
+        title: "Mit dir wachsen",
+        text: "Ich setze alles daran, mit dir zu wachsen. Unsere Gespräche nähren unsere Liebe – auch dann, wenn es mal nicht leicht ist. Wir reden, weil uns das Wir wichtig ist. Und ich liebe es, wie wir uns jeden Abend gute Nacht wünschen und jeden Morgen als erstes grüssen. Diese kleinen Rituale sind wie Klammern um unseren Tag.",
+        note: "Mit dir fühlt sich Wachstum nicht nach Anstrengung an, sondern nach Gemeinsamkeit.",
+        emoji: "🌱",
+        image: "",
+        extraImage: "",
+        extraSuggestion: "Hier kannst du ein Bild von unseren Chats oder etwas Symbolisches für unsere Gespräche einfügen."
+      },
+      {
+        // 8: Was ich dir sagen möchte – inkl. Heirats-Gedanke
+        title: "Was ich dir sagen möchte",
+        text: "All das hier ist nur ein kleiner Versuch, dir zu zeigen, was in Worten eigentlich kaum reinpasst: wie wichtig du mir bist. Wie dankbar ich bin, dass es dich in meinem Leben gibt. Unsere Verbindung, unsere Gespräche, unsere Nähe – das alles ist nicht selbstverständlich. Tief in mir weiss ich, dass du die Richtige für mich bist. Und ich weiss, dass ich dich eines Tages heiraten werde.",
+        note: "Es gibt drei Worte, die ich dir von Herzen sagen möchte.",
+        emoji: "💌",
+        image: "",
+        extraImage: "",
+        extraSuggestion: "Hier passt ein Bild, das für dich ganz besonders mit uns verbunden ist."
+      }
+    ];
+
+    const avatarEmojiEl   = document.getElementById("avatarEmoji");
+    const panel           = document.getElementById("panel");
+    const panelChapterEl  = document.getElementById("panelChapter");
+    const panelStepTextEl = document.getElementById("panelStepText");
+    const panelEmojiEl    = document.getElementById("panelEmoji");
+    const panelImageEl    = document.getElementById("panelImage");
+    const panelHeadlineEl = document.getElementById("panelHeadline");
+    const panelTextEl     = document.getElementById("panelText");
+    const panelNoteEl     = document.getElementById("panelNote");
+
+    const panelExtraImageEl       = document.getElementById("panelExtraImage");
+    const panelExtraPlaceholderEl = document.getElementById("panelExtraPlaceholder");
+
+    const dotsContainer   = document.getElementById("dotsContainer");
+
+    const prevBtn         = document.getElementById("prevBtn");
+    const nextBtn         = document.getElementById("nextBtn");
+
+    const finaleOverlay   = document.getElementById("finaleOverlay");
+    const finaleNameEl    = document.getElementById("finaleName");
+    const closeFinaleBtn  = document.getElementById("closeFinaleBtn");
+
+    let currentIndex = 0;
+
+    function initDots() {
+      dotsContainer.innerHTML = "";
+      slides.forEach((_, idx) => {
+        const dot = document.createElement("div");
+        dot.className = "dot" + (idx === currentIndex ? " active" : "");
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function updateDots() {
+      const dots = dotsContainer.querySelectorAll(".dot");
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === currentIndex);
+      });
+    }
+
+    function updateButtons() {
+      prevBtn.disabled = currentIndex === 0;
+      if (currentIndex === slides.length - 1) {
+        nextBtn.innerHTML = 'Zum grossen Finale <span class="icon">💌</span>';
+      } else {
+        nextBtn.innerHTML = 'Weiter <span class="icon">➡️</span>';
+      }
+    }
+
+    function showSlide(index) {
+      const slide = slides[index];
+      if (!slide) return;
+
+      panel.classList.remove("panel-animated");
+      void panel.offsetWidth;
+      panel.classList.add("panel-animated");
+
+      panelChapterEl.textContent  = index + 1;
+      panelStepTextEl.textContent = `Seite ${index + 1} von ${slides.length}`;
+
+      panelHeadlineEl.textContent = slide.title;
+      panelTextEl.textContent     = slide.text;
+      panelNoteEl.textContent     = slide.note || "";
+
+      // Hauptbild / Emoji
+      if (slide.image) {
+        panelImageEl.src = slide.image;
+        panelImageEl.style.display = "block";
+        panelEmojiEl.style.display = "none";
+      } else {
+        panelEmojiEl.textContent   = slide.emoji || "💗";
+        panelEmojiEl.style.display = "block";
+        panelImageEl.style.display = "none";
+      }
+
+      // Extra-Bild unten
+      if (slide.extraImage) {
+        panelExtraImageEl.src = slide.extraImage;
+        panelExtraImageEl.style.display = "block";
+        panelExtraPlaceholderEl.textContent = slide.extraSuggestion || "Hier kannst du ein Bild von uns einfügen.";
+      } else {
+        panelExtraImageEl.style.display = "none";
+        panelExtraPlaceholderEl.textContent = slide.extraSuggestion || "Hier kannst du später ein Bild von uns einfügen.";
+      }
+
+      updateDots();
+      updateButtons();
+    }
+
+    function openFinale() {
+      if (herName && herName.trim() !== "") {
+        finaleNameEl.textContent = `Ich liebe dich, ${herName}. 🫶`;
+      }
+      finaleOverlay.classList.add("show");
+    }
+
+    function closeFinale() {
+      finaleOverlay.classList.remove("show");
+      currentIndex = 0;
+      showSlide(currentIndex);
+    }
+
+    prevBtn.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        showSlide(currentIndex);
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < slides.length - 1) {
+        currentIndex++;
+        showSlide(currentIndex);
+      } else {
+        openFinale();
+      }
+    });
+
+    closeFinaleBtn.addEventListener("click", () => {
+      closeFinale();
+    });
+
+    // Init
+    initDots();
+    showSlide(currentIndex);
+  </script>
+</body>
+</html>
