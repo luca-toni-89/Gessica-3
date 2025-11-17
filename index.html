@@ -29,8 +29,9 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text-main);
       background: radial-gradient(circle at top, #020617, #020617 40%, #0b1120 100%);
-      overflow: hidden;
       padding: 16px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* sanfter Glow-Nebel */
@@ -210,7 +211,7 @@
       gap: 14px;
       align-items: center;
       justify-content: center;
-      margin-bottom: 18px;
+      margin-bottom: 10px;
       flex-wrap: wrap;
     }
 
@@ -240,27 +241,6 @@
       text-transform: uppercase;
       letter-spacing: 0.14em;
       color: var(--text-muted);
-    }
-
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      background: rgba(15,23,42,0.88);
-      border: 1px solid rgba(148,163,184,0.4);
-      color: var(--text-muted);
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent3);
-      box-shadow: 0 0 0 4px rgba(34,197,94,0.32);
-      animation: pulseDot 2s ease-out infinite;
     }
 
     /* Comic-Panel */
@@ -373,43 +353,14 @@
       margin-top: 6px;
     }
 
-    /* EXTRA: Bild-Platzhalter pro Kapitel */
-    .panel-extra {
-      margin-top: 10px;
-    }
-
-    .panel-extra-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    .panel-extra-frame {
-      border-radius: 14px;
-      border: 1px dashed rgba(148,163,184,0.6);
-      background: rgba(15,23,42,0.85);
-      padding: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 80px;
-      text-align: center;
-    }
-
-    #panelExtraImage {
-      max-width: 100%;
-      max-height: 180px;
-      border-radius: 10px;
+    /* Extra-Bild, clean ohne Rahmen/Titel */
+    .panel-extra-image {
       display: none;
+      margin-top: 10px;
+      max-width: 100%;
+      max-height: 220px;
+      border-radius: 14px;
       object-fit: cover;
-    }
-
-    #panelExtraPlaceholder {
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.5;
     }
 
     /* Dots */
@@ -633,6 +584,122 @@
       30%  { transform: scale(1.1) translateY(0); opacity: 1; }
       100% { transform: scale(1.0) translateY(-10px); opacity: 0; }
     }
+
+    /* Intro-Overlay (Start-Screen) */
+    .intro-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      z-index: 6;
+      transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+    }
+
+    .intro-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .intro-inner {
+      text-align: center;
+      width: min(420px, 100% - 32px);
+      padding: 22px 18px 20px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(236,72,153,0.4), transparent 60%),
+        rgba(15,23,42,0.96);
+      box-shadow:
+        0 26px 70px rgba(0,0,0,0.9),
+        0 0 0 1px rgba(248,250,252,0.14);
+      backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-emoji {
+      font-size: 50px;
+      margin-bottom: 12px;
+      transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+    }
+
+    .intro-emoji-open {
+      animation: envelopeOpen 0.6s ease-out forwards;
+    }
+
+    @keyframes envelopeOpen {
+      0%   { transform: scale(0.8) translateY(0); opacity: 1; }
+      50%  { transform: scale(1.2) translateY(-8px); opacity: 1; }
+      100% { transform: scale(0.9) translateY(-24px); opacity: 0; }
+    }
+
+    .intro-title {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .intro-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .intro-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ec4899, #fb7185);
+      color: white;
+      box-shadow:
+        0 14px 30px rgba(248,113,113,0.7),
+        0 0 0 1px rgba(248, 250, 252, 0.12);
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s;
+    }
+
+    .intro-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow:
+        0 18px 40px rgba(248,113,113,0.9),
+        0 0 0 1px rgba(248, 250, 252, 0.16);
+    }
+
+    .intro-btn:active {
+      transform: translateY(0);
+      filter: brightness(0.97);
+      box-shadow:
+        0 10px 24px rgba(248,113,113,0.7),
+        0 0 0 1px rgba(248, 250, 252, 0.12);
+    }
+
+    /* Herz-Transition beim Kapitelwechsel – jetzt 4× grösser */
+    .transition-heart {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 208px; /* vorher 52px */
+      z-index: 4;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .transition-heart.show {
+      animation: heartbeat 0.55s ease-out;
+    }
+
+    @keyframes heartbeat {
+      0%   { transform: scale(0.6); opacity: 0; }
+      30%  { transform: scale(1.2); opacity: 1; }
+      60%  { transform: scale(0.85); opacity: 1; }
+      100% { transform: scale(0.6); opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -646,31 +713,41 @@
     <div class="heart">💕</div>
   </div>
 
+  <!-- Start-Screen -->
+  <div id="introOverlay" class="intro-overlay">
+    <div class="intro-inner">
+      <div id="introEmoji" class="intro-emoji">📩</div>
+      <div class="intro-title">Min Schatz</div>
+      <div class="intro-text">
+        Das isch min digitaler Liebesbrief a dich.  
+        Nimm dir e chli Ziit, klick uf de Brief und löh di dur eusi Gschicht führe. 🫶
+      </div>
+      <button id="introBtn" class="intro-btn">
+        Zum Liebesbrief 💌
+      </button>
+    </div>
+  </div>
+
+  <!-- Herz-Transition -->
+  <div id="transitionHeart" class="transition-heart">❤️</div>
+
   <div class="app">
     <div class="card">
       <div class="card-inner">
         <div class="badge">
           <span class="badge-dot"></span>
-          Liebesgschicht G+L
+          A TRUE LOVE STORY
         </div>
 
         <h1>Für dich 💌</h1>
         <div class="subtitle">
-          Klick dich dure – Schritt für Schritt möcht ich dir die Gschicht verzehle,
-          was du mir bedüütisch
+          Klick dich dure – Schritt für Schritt möcht ich dir d'Gschicht verzehle,
+          was du mir bedüütisch.
         </div>
 
         <div class="hero-row">
           <div>
             <div class="avatar" id="avatarEmoji">💘</div>
-          </div>
-          <div>
-            <div class="small-text">Status</div>
-            <div style="height:6px;"></div>
-            <div class="status">
-              <span class="status-dot"></span>
-              Eusi Gschicht lauft grad...
-            </div>
           </div>
         </div>
 
@@ -698,17 +775,8 @@
                 Zusatz
               </div>
 
-              <!-- Bild-Platzhalter pro Kapitel -->
-              <div class="panel-extra">
-                <div class="panel-extra-label">Kapitel-Bild</div>
-                <div class="panel-extra-frame">
-                  <img id="panelExtraImage" alt="Kapitelbild" />
-                  <div id="panelExtraPlaceholder">
-                    Hier kannst du später ein Bild von uns einfügen.
-                  </div>
-                </div>
-              </div>
-
+              <!-- Cleanes Kapitelbild -->
+              <img id="panelExtraImage" class="panel-extra-image" alt="Kapitelbild" />
             </div>
           </div>
         </div>
@@ -718,10 +786,10 @@
         <div class="buttons">
           <button id="prevBtn" class="btn" disabled>
             <span class="icon">⬅️</span>
-            Zurück
+            Zrugg
           </button>
           <button id="nextBtn" class="btn btn-primary">
-            Weiter
+            Wiiter
             <span class="icon">➡️</span>
           </button>
         </div>
@@ -763,18 +831,16 @@
         note: "Damals hät ich nie denkt, wie wichtig du mir mal sii wirsch.",
         emoji: "✨",
         image: "",
-        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_000000004f1c71f48ba8f117c34f4608&ts=489669&p=fs&cid=1&sig=12526c5b940e9bc5081a7346393bf07bab4c527850f4af1e8d8877925e7389e2&v=0",
-        extraSuggestion: "Hier passt ein Bild von deinen Ferien oder ein Foto aus dieser Zeit."
+        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_000000004f1c71f48ba8f117c34f4608&ts=489669&p=fs&cid=1&sig=12526c5b940e9bc5081a7346393bf07bab4c527850f4af1e8d8877925e7389e2&v=0"
       },
       {
         // 2: Erstes Treffen + Kuss + alles richtig
         title: "Eusi ersti Äbige zeme",
-        text: "Chuum bisch du zrugg id Schwiiz glandet, scho hend mir eus troffe. Keis langs Zögere, keis Abwarte. Am ersten Abig isch scho en Kuss gfalle – und wieder isch die Verbindig so düütlich z'spüre gsi. Ide folgende Täg isch es so gsi, als wür öppis, wo längst da gsi isch, endlich en Platz becho. Alles isch so zwanglos gs und vertraut.Es hat sich sofort richtig ahgfühlt, als wür ich dich scho ewig kenne - als wärsch du scho immer a minere Siite gsi.",
+        text: "Chuum bisch du zrugg id Schwiiz glandet, scho hend mir eus troffe. Keis langs Zögere, keis Abwarte. Am ersten Abig isch scho en Kuss gfalle – und wieder isch die Verbindig so düütlich z'spüre gsi. Ide folgende Täg isch es so gsi, als wür öppis, wo längst da gsi isch, endlich en Platz becho. Alles isch so zwanglos gs und vertraut. Es hat sich sofort richtig ahgfühlt, als wür ich dich scho ewig kenne – als wärsch du scho immer a minere Siite gsi.",
         note: "Ich weiss no ganz genau, wie sich das alles ahgfühlt hat.",
         emoji: "💫",
         image: "",
-        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_00000000955071f499a98640a0a02819&ts=489669&p=fs&cid=1&sig=8c786144338e1501863314eb63ff1321a1923d0ce7cef431bcc687375768a3b8&v=0",
-        extraSuggestion: "Hier kannst du ein Bild von uns oder etwas Symbolisches für diesen ersten Abend einfügen."
+        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_00000000955071f499a98640a0a02819&ts=489669&p=fs&cid=1&sig=8c786144338e1501863314eb63ff1321a1923d0ce7cef431bcc687375768a3b8&v=0"
       },
       {
         // 3: Lieblingsmoment – Ruhe, Nähe, Lachen
@@ -783,18 +849,16 @@
         note: "Du bedütisch mir meh, als ich je in Wort fasse chan.",
         emoji: "🌙",
         image: "",
-        extraImage: "https://sdmntprukwest.oaiusercontent.com/files/00000000-1d8c-6243-9512-09eb1179bda0/raw?se=2025-11-10T22%3A46%3A23Z&sp=r&sv=2024-08-04&sr=b&scid=21eb8527-db36-4054-8a8f-b3ca5610fc9c&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-10T02%3A57%3A56Z&ske=2025-11-11T02%3A57%3A56Z&sks=b&skv=2024-08-04&sig=QvxsamXJHyMRH%2BDcdIpbtIpcRSYexhIINiSc%2BCMcs4M%3D",
-        extraSuggestion: "Hier passt ein Bild von einem Abend zu zweit – Sofa, Kerzen, Lieblingsessen."
+        extraImage: "https://sdmntprukwest.oaiusercontent.com/files/00000000-1d8c-6243-9512-09eb1179bda0/raw?se=2025-11-10T22%3A46%3A23Z&sp=r&sv=2024-08-04&sr=b&scid=21eb8527-db36-4054-8a8f-b3ca5610fc9c&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-10T02%3A57%3A56Z&ske=2025-11-11T02%3A57%3A56Z&sks=b&skv=2024-08-04&sig=QvxsamXJHyMRH%2BDcdIpbtIpcRSYexhIINiSc%2BCMcs4M%3D"
       },
       {
         // 4: Was er an ihr bewundert
         title: "Was ich a dir bewundere",
         text: "Ich bewundere dini iifühlsami Art und dass du immer d'Nöchi zu mir suechsch. Dass du immer wieder d'Chraft findsch, für mich da z'sii – sogar dänn, wenn du es selber extrem stressig hesch. Ich liebe alles an dir: Dis Lache, dini Auge, dini Ahweseheit, aber ganz bsundrigs dis guete Herz.",
-        note: "Du gsehsch oft gar nicht, wie viel Liecht du i mis Lebe bringsch. Ich chan dir nöd gnueg defür danke",
+        note: "Du gsehsch oft gar nicht, wie viel Liecht du i mis Lebe bringsch. Ich chan dir nöd gnueg defür danke.",
         emoji: "💖",
         image: "",
-        extraImage: "https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-8600-620e-8f87-e90edc6d684a/raw?se=2025-11-10T22%3A46%3A05Z&sp=r&sv=2024-08-04&sr=b&scid=f24e7979-c372-4fcb-a3cc-63681dd8c922&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-09T23%3A15%3A20Z&ske=2025-11-10T23%3A15%3A20Z&sks=b&skv=2024-08-04&sig=Nsr53wf5ZtB/9AOuJ8gSdBMj7qzlW%2BOS9QjZPiE6T0M%3D",
-        extraSuggestion: "Hier kannst du ein Bild von dir einfügen – vielleicht eins, auf dem du lachst."
+        extraImage: "https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-8600-620e-8f87-e90edc6d684a/raw?se=2025-11-10T22%3A46%3A05Z&sp=r&sv=2024-08-04&sr=b&scid=f24e7979-c372-4fcb-a3cc-63681dd8c922&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-09T23%3A15%3A20Z&ske=2025-11-10T23%3A15%3A20Z&sks=b&skv=2024-08-04&sig=Nsr53wf5ZtB/9AOuJ8gSdBMj7qzlW%2BOS9QjZPiE6T0M%3D"
       },
       {
         // 5: Wie ich mich mit dir fühle – angekommen, Safe Space
@@ -803,8 +867,7 @@
         note: "Bi dir chan ich eifach ich selber sii.",
         emoji: "🤍",
         image: "",
-        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_000000002be8720a81adb9580e610a78&ts=489670&p=fs&cid=1&sig=93a21040a96aa67337ff6792a3ce5f337eeea6ff540173ea46c28782d1e05a04&v=0",
-        extraSuggestion: "Hier passt ein ruhiges, weiches Bild – vielleicht ein Ort, an dem wir uns besonders wohl fühlen."
+        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_000000002be8720a81adb9580e610a78&ts=489670&p=fs&cid=1&sig=93a21040a96aa67337ff6792a3ce5f337eeea6ff540173ea46c28782d1e05a04&v=0"
       },
       {
         // 6: Wenn du nicht bei mir bist – getrennte Wohnungen, Vermissen
@@ -813,28 +876,25 @@
         note: "Mis Herz isch bi dir, au wenn mir grad nöd am gliche Ort sind.",
         emoji: "🌙",
         image: "",
-        extraImage: "https://sdmntprcentralus.oaiusercontent.com/files/00000000-530c-61f5-bbe2-905a2435484b/raw?se=2025-11-10T22%3A46%3A05Z&sp=r&sv=2024-08-04&sr=b&scid=f24e7979-c372-4fcb-a3cc-63681dd8c922&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-09T23%3A12%3A42Z&ske=2025-11-10T23%3A12%3A42Z&sks=b&skv=2024-08-04&sig=AdcR2i%2B6%2Bued6o97ApFfoBRjIRT4Q/bXOY/6I5A4g7I%3D",
-        extraSuggestion: "Hier kannst du ein Bild von zwei Orten einfügen – oder etwas, das für Abstand und Nähe gleichzeitig steht."
+        extraImage: "https://sdmntprcentralus.oaiusercontent.com/files/00000000-530c-61f5-bbe2-905a2435484b/raw?se=2025-11-10T22%3A46%3A05Z&sp=r&sv=2024-08-04&sr=b&scid=f24e7979-c372-4fcb-a3cc-63681dd8c922&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-09T23%3A12%3A42Z&ske=2025-11-10T23%3A12%3A42Z&sks=b&skv=2024-08-04&sig=AdcR2i%2B6%2Bued6o97ApFfoBRjIRT4Q/bXOY/6I5A4g7I%3D"
       },
       {
         // 7: Gespräche, die Liebe nähren + Rituale
-        title: "Gmeinsam Wachse",
-        text: "Ich setze alles daran, mit dir zu wachsen. Unsere Gespräche nähren unsere Liebe – auch dann, wenn es mal nicht leicht ist. Wir reden, weil uns das Wir wichtig ist. Und ich liebe es, wie wir uns jeden Abend gute Nacht wünschen und jeden Morgen als erstes grüssen. Diese kleinen Rituale sind wie Klammern um unseren Tag.",
-        note: "Mit dir fühlt sich Wachstum nicht nach Anstrengung an, sondern nach Gemeinsamkeit.",
+        title: "Gmeinsam wachse",
+        text: "Ich setze alles daran, mit dir z'wachse. Eusi Gspröch nähred eusi Liebi – au dänn, wenn's mal nöd eifach isch. Mir rede, wil uns s'«mir» wichtig isch. Und ich liebe es, wie mir eus jede Abig guet Nacht wünsche und jede Morge als erscht grüessed. Die chliine Rituale sind wie Gschützboge ume üsne Tag ume.",
+        note: "Mit dir fühlt sich Wachsum nöd no chrampfe aa, sondern no Gmeinsamkeit.",
         emoji: "🌱",
         image: "",
-        extraImage: "https://sdmntprcentralus.oaiusercontent.com/files/00000000-1058-61f5-a985-1e4a5ab99959/raw?se=2025-11-10T22%3A47%3A26Z&sp=r&sv=2024-08-04&sr=b&scid=d16d512c-e7e3-4a7e-b631-1392c1a2c77d&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-09T23%3A12%3A42Z&ske=2025-11-10T23%3A12%3A42Z&sks=b&skv=2024-08-04&sig=/Ubm7zVJBNLLLmLel3VhfBFKPR0lZ5GgE9VP840BEK8%3D",
-        extraSuggestion: "Hier kannst du ein Bild von unseren Chats oder etwas Symbolisches für unsere Gespräche einfügen."
+        extraImage: "https://sdmntprcentralus.oaiusercontent.com/files/00000000-1058-61f5-a985-1e4a5ab99959/raw?se=2025-11-10T22%3A47%3A26Z&sp=r&sv=2024-08-04&sr=b&scid=d16d512c-e7e3-4a7e-b631-1392c1a2c77d&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-09T23%3A12%3A42Z&ske=2025-11-10T23%3A12%3A42Z&sks=b&skv=2024-08-04&sig=/Ubm7zVJBNLLLmLel3VhfBFKPR0lZ5GgE9VP840BEK8%3D"
       },
       {
         // 8: Was ich dir sagen möchte – inkl. Heirats-Gedanke
         title: "Was ich dir unbedingt säge wött",
-        text: "All das hier ist nur ein kleiner Versuch, dir zu zeigen, was in Worten eigentlich kaum reinpasst: wie wichtig du mir bist. Wie dankbar ich bin, dass es dich in meinem Leben gibt. Unsere Verbindung, unsere Gespräche, unsere Nähe – das alles ist nicht selbstverständlich. Tief in mir weiss ich, dass du die Richtige für mich bist. Und ich weiss, dass ich dich eines Tages heiraten werde.",
-        note: "Es gibt drei Worte, die ich dir von Herzen sagen möchte.",
+        text: "All das da isch nur en chline Versuech, dir z'zeige, was i Wort eigentlich fasch nöd Platz findet: wie wichtig du mir bisch. Wie dankbar ich bi, dass es dich i mim Läbe git. Eusi Verbindig, eusi Gspröch, eusi Nöchi – das alles isch nöd selbstverständlich. Tief i mir inne weiss ich, dass du di Richtigi für mich bisch. Und ich weiss, dass ich dich einisch heirate werde.",
+        note: "Es git drü Wort, woni dir vo Härze wott säge.",
         emoji: "💌",
         image: "",
-        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_00000000aaac71f48cbd334c7ea7c7d9&ts=489670&p=fs&cid=1&sig=e6ea55e94f0e96457521c4bbf2e4b9de13a1594098dc152f7d9565a132fb59ca&v=0",
-        extraSuggestion: "Hier passt ein Bild, das für dich ganz besonders mit uns verbunden ist."
+        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_00000000aaac71f48cbd334c7ea7c7d9&ts=489670&p=fs&cid=1&sig=e6ea55e94f0e96457521c4bbf2e4b9de13a1594098dc152f7d9565a132fb59ca&v=0"
       }
     ];
 
@@ -847,9 +907,7 @@
     const panelHeadlineEl = document.getElementById("panelHeadline");
     const panelTextEl     = document.getElementById("panelText");
     const panelNoteEl     = document.getElementById("panelNote");
-
-    const panelExtraImageEl       = document.getElementById("panelExtraImage");
-    const panelExtraPlaceholderEl = document.getElementById("panelExtraPlaceholder");
+    const panelExtraImageEl = document.getElementById("panelExtraImage");
 
     const dotsContainer   = document.getElementById("dotsContainer");
 
@@ -859,6 +917,12 @@
     const finaleOverlay   = document.getElementById("finaleOverlay");
     const finaleNameEl    = document.getElementById("finaleName");
     const closeFinaleBtn  = document.getElementById("closeFinaleBtn");
+
+    const introOverlay    = document.getElementById("introOverlay");
+    const introBtn        = document.getElementById("introBtn");
+    const introEmoji      = document.getElementById("introEmoji");
+
+    const transitionHeart = document.getElementById("transitionHeart");
 
     let currentIndex = 0;
 
@@ -881,9 +945,9 @@
     function updateButtons() {
       prevBtn.disabled = currentIndex === 0;
       if (currentIndex === slides.length - 1) {
-        nextBtn.innerHTML = 'Zum grossen Finale <span class="icon">💌</span>';
+        nextBtn.innerHTML = 'Zum grosse Finale <span class="icon">💌</span>';
       } else {
-        nextBtn.innerHTML = 'Weiter <span class="icon">➡️</span>';
+        nextBtn.innerHTML = 'Wiiter <span class="icon">➡️</span>';
       }
     }
 
@@ -913,14 +977,12 @@
         panelImageEl.style.display = "none";
       }
 
-      // Extra-Bild unten
+      // Extra-Bild unten, clean
       if (slide.extraImage) {
         panelExtraImageEl.src = slide.extraImage;
         panelExtraImageEl.style.display = "block";
-        panelExtraPlaceholderEl.textContent = slide.extraSuggestion || "Hier kannst du ein Bild von uns einfügen.";
       } else {
         panelExtraImageEl.style.display = "none";
-        panelExtraPlaceholderEl.textContent = slide.extraSuggestion || "Hier kannst du später ein Bild von uns einfügen.";
       }
 
       updateDots();
@@ -929,7 +991,7 @@
 
     function openFinale() {
       if (herName && herName.trim() !== "") {
-        finaleNameEl.textContent = `Ich liebe dich, ${herName}. 🫶`;
+        finaleNameEl.textContent = `Ich lieb dich, ${herName}. 🫶`;
       }
       finaleOverlay.classList.add("show");
     }
@@ -938,6 +1000,18 @@
       finaleOverlay.classList.remove("show");
       currentIndex = 0;
       showSlide(currentIndex);
+    }
+
+    function playHeartTransition(targetIndex) {
+      // Herz kurz anzeigen
+      transitionHeart.classList.remove("show");
+      void transitionHeart.offsetWidth;
+      transitionHeart.classList.add("show");
+
+      setTimeout(() => {
+        currentIndex = targetIndex;
+        showSlide(currentIndex);
+      }, 550);
     }
 
     prevBtn.addEventListener("click", () => {
@@ -949,8 +1023,8 @@
 
     nextBtn.addEventListener("click", () => {
       if (currentIndex < slides.length - 1) {
-        currentIndex++;
-        showSlide(currentIndex);
+        const targetIndex = currentIndex + 1;
+        playHeartTransition(targetIndex);
       } else {
         openFinale();
       }
@@ -958,6 +1032,15 @@
 
     closeFinaleBtn.addEventListener("click", () => {
       closeFinale();
+    });
+
+    // Intro-Startscreen
+    introBtn.addEventListener("click", () => {
+      introEmoji.textContent = "💌";
+      introEmoji.classList.add("intro-emoji-open");
+      setTimeout(() => {
+        introOverlay.classList.add("hidden");
+      }, 550);
     });
 
     // Init
