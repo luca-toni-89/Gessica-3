@@ -44,8 +44,8 @@
         radial-gradient(circle at 100% 0%, rgba(248,113,113,0.4), transparent 55%),
         radial-gradient(circle at 0% 100%, rgba(96,165,250,0.35), transparent 55%),
         radial-gradient(circle at 100% 100%, rgba(52,211,153,0.35), transparent 55%);
-      opacity: 0.3;
-      filter: blur(70px);
+      opacity: 0.32;
+      filter: blur(80px);
       animation: bgGlow 26s ease-in-out infinite alternate;
       pointer-events: none;
       z-index: 0;
@@ -71,7 +71,7 @@
           transparent 1px
         );
       background-size: 44px 44px;
-      opacity: 0.4;
+      opacity: 0.35;
       pointer-events: none;
       animation: gridMove 40s linear infinite;
       z-index: 0;
@@ -83,33 +83,40 @@
       100% { transform: translate3d(0,0,0); }
     }
 
-    /* schwebende Herzen */
-    .floating-hearts {
+    /* Glitzer-Partikel im Hintergrund */
+    .bg-particles {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.6;
+      opacity: 0.75;
     }
 
-    .heart {
+    .particle {
       position: absolute;
-      font-size: 22px;
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(248,250,252,0.85);
+      box-shadow: 0 0 12px rgba(248,250,252,0.9);
       opacity: 0;
-      animation: floatHeart 12s linear infinite;
+      animation: particleDrift 18s linear infinite;
     }
 
-    .heart:nth-child(1) { left: 10%; bottom: -10%; animation-delay: 0s; }
-    .heart:nth-child(2) { left: 25%; bottom: -10%; animation-delay: 3s; }
-    .heart:nth-child(3) { left: 50%; bottom: -10%; animation-delay: 6s; }
-    .heart:nth-child(4) { left: 70%; bottom: -10%; animation-delay: 1.5s; }
-    .heart:nth-child(5) { left: 85%; bottom: -10%; animation-delay: 4.5s; }
+    .particle:nth-child(1)  { top: 10%; left: 12%; animation-delay: 0s; }
+    .particle:nth-child(2)  { top: 80%; left: 20%; animation-delay: 3s; }
+    .particle:nth-child(3)  { top: 25%; left: 70%; animation-delay: 6s; }
+    .particle:nth-child(4)  { top: 60%; left: 60%; animation-delay: 9s; }
+    .particle:nth-child(5)  { top: 40%; left: 10%; animation-delay: 12s; }
+    .particle:nth-child(6)  { top: 15%; left: 85%; animation-delay: 15s; }
+    .particle:nth-child(7)  { top: 50%; left: 45%; animation-delay: 4s; }
+    .particle:nth-child(8)  { top: 72%; left: 75%; animation-delay: 10s; }
 
-    @keyframes floatHeart {
-      0%   { transform: translateY(0) scale(0.6); opacity: 0; }
-      10%  { opacity: 1; }
-      60%  { transform: translateY(-60vh) scale(1.1); opacity: 0.8; }
-      100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+    @keyframes particleDrift {
+      0%   { transform: translate3d(0,0,0) scale(0.4); opacity: 0; }
+      10%  { opacity: 0.9; }
+      50%  { transform: translate3d(30px,-35px,0) scale(1); opacity: 0.7; }
+      100% { transform: translate3d(-20px,-80px,0) scale(0.6); opacity: 0; }
     }
 
     .app {
@@ -133,7 +140,7 @@
         0 26px 60px rgba(15, 23, 42, 0.95),
         0 0 0 1px rgba(248, 250, 252, 0.08);
       backdrop-filter: blur(18px);
-      overflow: hidden;
+      overflow: hidden; /* wichtig fürs Clippen der Herzen */
     }
 
     .card::before {
@@ -145,10 +152,10 @@
         rgba(236,72,153,0),
         rgba(236,72,153,0.8),
         rgba(248,113,113,0.9),
-        rgba(56,189,248,0.85),
+        rgba(96,165,250,0.9),
         rgba(236,72,153,0)
       );
-      opacity: 0.16;
+      opacity: 0.18;
       animation: cardGlow 26s linear infinite;
       pointer-events: none;
     }
@@ -160,7 +167,38 @@
 
     .card-inner {
       position: relative;
+      z-index: 2;
+    }
+
+    /* Herzen im Card-Framework */
+    .card-hearts {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
       z-index: 1;
+      opacity: 0.45;
+    }
+
+    .card-heart {
+      position: absolute;
+      font-size: 26px;
+      opacity: 0;
+      filter: drop-shadow(0 0 14px rgba(236,72,153,0.55));
+      animation: cardHeartFloat 18s linear infinite;
+    }
+
+    .card-heart:nth-child(1) { top: 8%;  left: 8%;  animation-delay: 0s;  }
+    .card-heart:nth-child(2) { top: 12%; right: 10%; animation-delay: 4s; }
+    .card-heart:nth-child(3) { top: 48%; left: 4%;  animation-delay: 8s; }
+    .card-heart:nth-child(4) { bottom: 18%; right: 12%; animation-delay: 2s; }
+    .card-heart:nth-child(5) { bottom: 10%; left: 18%; animation-delay: 6s; }
+
+    @keyframes cardHeartFloat {
+      0%   { transform: translateY(10px) scale(0.7) rotate(0deg);   opacity: 0; }
+      20%  { opacity: 0.85; }
+      50%  { transform: translateY(-10px) scale(1.0) rotate(10deg); opacity: 0.9; }
+      80%  { transform: translateY(-4px) scale(0.95) rotate(-8deg); opacity: 0.5; }
+      100% { transform: translateY(10px) scale(0.7) rotate(0deg);   opacity: 0; }
     }
 
     .badge {
@@ -174,6 +212,8 @@
       border: 1px solid rgba(148,163,184,0.7);
       color: var(--text-muted);
       margin-bottom: 10px;
+      position: relative;
+      z-index: 2;
     }
 
     .badge-dot {
@@ -197,13 +237,17 @@
       margin-bottom: 6px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      position: relative;
+      z-index: 2;
     }
 
     .subtitle {
       text-align: center;
       font-size: 13px;
       color: var(--text-muted);
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
     }
 
     .hero-row {
@@ -211,19 +255,21 @@
       gap: 14px;
       align-items: center;
       justify-content: center;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
     }
 
     .avatar {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
       border-radius: 999px;
       border: 1px solid rgba(248,250,252,0.7);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
+      font-size: 40px;
       background: radial-gradient(circle at 30% 20%, #fee2e2, #fb7185);
       box-shadow:
         0 12px 32px rgba(15,23,42,0.8),
@@ -236,14 +282,6 @@
       50%     { transform: translateY(-4px); }
     }
 
-    .small-text {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--text-muted);
-    }
-
-    /* Comic-Panel */
     .panel {
       margin-top: 4px;
       padding: 14px 12px 12px;
@@ -251,6 +289,8 @@
       background: radial-gradient(circle at top left, rgba(15,23,42,0.16), transparent 60%),
                   rgba(15,23,42,0.9);
       border: 1px solid rgba(148,163,184,0.4);
+      position: relative;
+      z-index: 2;
     }
 
     .panel-header {
@@ -269,10 +309,51 @@
     }
 
     .panel-step {
-      font-size: 11px;
-      color: var(--text-muted);
+      display: none;
     }
 
+    /* NEON Ladebalken – statisch, ohne Flimmern */
+    .progress-wrapper {
+      margin-bottom: 20px;
+      margin-top: 10px;
+    }
+
+    .progress-track {
+      position: relative;
+      width: 100%;
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.6);
+      overflow: hidden;
+
+      /* Neon-Rand (statisch) */
+      box-shadow:
+        0 0 0 1px rgba(236,72,153,0.8),
+        0 0 12px rgba(236,72,153,0.7),
+        0 0 26px rgba(236,72,153,0.65),
+        0 0 40px rgba(236,72,153,0.5);
+    }
+
+    .progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0%;
+  border-radius: inherit;
+
+  /* weicher, homogener Verlauf ohne harte Kanten */
+  background: linear-gradient(90deg, #fecaca, #fb7185);
+  /* keine Wiederholung / kein background-size mehr */
+
+  box-shadow:
+    0 0 10px rgba(236,72,153,0.9),
+    0 0 22px rgba(251,113,133,0.9),
+    0 0 40px rgba(236,72,153,0.9),
+    0 0 70px rgba(236,72,153,0.8);
+
+  transition: width 0.5s ease-out;
+}
     .panel-main {
       display: grid;
       grid-template-columns: 110px 1fr;
@@ -353,7 +434,7 @@
       margin-top: 6px;
     }
 
-    /* Extra-Bild, clean ohne Rahmen/Titel */
+    /* Extra-Bild, clean */
     .panel-extra-image {
       display: none;
       margin-top: 10px;
@@ -370,6 +451,8 @@
       justify-content: center;
       margin-top: 14px;
       margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
     }
 
     .dot {
@@ -385,12 +468,13 @@
       transform: scale(1.3);
     }
 
-    /* Buttons */
     .buttons {
       display: flex;
       justify-content: space-between;
       gap: 10px;
       margin-top: 8px;
+      position: relative;
+      z-index: 2;
     }
 
     .btn {
@@ -454,7 +538,6 @@
       transform: none;
     }
 
-    /* Slide Animation */
     .panel-animated {
       animation: panelIn 0.45s ease-out;
     }
@@ -542,7 +625,7 @@
       box-shadow:
         0 14px 30px rgba(248,113,113,0.7),
         0 0 0 1px rgba(248, 250, 252, 0.12);
-      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s ease-out;
     }
 
     .finale-btn:hover {
@@ -658,7 +741,7 @@
       box-shadow:
         0 14px 30px rgba(248,113,113,0.7),
         0 0 0 1px rgba(248, 250, 252, 0.12);
-      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s ease-out;
     }
 
     .intro-btn:hover {
@@ -677,21 +760,21 @@
         0 0 0 1px rgba(248, 250, 252, 0.12);
     }
 
-    /* Herz-Transition beim Kapitelwechsel – jetzt 4× grösser */
+    /* Herz-Transition beim Kapitelwechsel – rosa 💗, 1s */
     .transition-heart {
       position: fixed;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 208px; /* vorher 52px */
+      font-size: 208px;
       z-index: 4;
       pointer-events: none;
       opacity: 0;
     }
 
     .transition-heart.show {
-      animation: heartbeat 0.55s ease-out;
+      animation: heartbeat 1s ease-out;
     }
 
     @keyframes heartbeat {
@@ -705,12 +788,16 @@
 <body>
   <div class="bg-grid"></div>
 
-  <div class="floating-hearts">
-    <div class="heart">💗</div>
-    <div class="heart">💖</div>
-    <div class="heart">💘</div>
-    <div class="heart">💞</div>
-    <div class="heart">💕</div>
+  <!-- Glitzer-Partikel -->
+  <div class="bg-particles">
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
   </div>
 
   <!-- Start-Screen -->
@@ -729,10 +816,19 @@
   </div>
 
   <!-- Herz-Transition -->
-  <div id="transitionHeart" class="transition-heart">❤️</div>
+  <div id="transitionHeart" class="transition-heart">💗</div>
 
   <div class="app">
     <div class="card">
+      <!-- Herzen IM Card-Framework -->
+      <div class="card-hearts">
+        <div class="card-heart">💗</div>
+        <div class="card-heart">💖</div>
+        <div class="card-heart">💘</div>
+        <div class="card-heart">💞</div>
+        <div class="card-heart">💕</div>
+      </div>
+
       <div class="card-inner">
         <div class="badge">
           <span class="badge-dot"></span>
@@ -746,15 +842,20 @@
         </div>
 
         <div class="hero-row">
-          <div>
-            <div class="avatar" id="avatarEmoji">💘</div>
-          </div>
+          <div class="avatar" id="avatarEmoji">💘</div>
         </div>
 
         <div id="panel" class="panel panel-animated">
           <div class="panel-header">
             <div class="panel-title">Kapitel <span id="panelChapter">1</span></div>
-            <div class="panel-step" id="panelStepText">Seite 1 von 8</div>
+            <div class="panel-step" id="panelStepText"></div>
+          </div>
+
+          <!-- Neon-Ladebalken -->
+          <div class="progress-wrapper">
+            <div class="progress-track">
+              <div id="progressFill" class="progress-fill"></div>
+            </div>
           </div>
 
           <div class="panel-main">
@@ -775,7 +876,7 @@
                 Zusatz
               </div>
 
-              <!-- Cleanes Kapitelbild -->
+              <!-- cleanes Kapitelbild -->
               <img id="panelExtraImage" class="panel-extra-image" alt="Kapitelbild" />
             </div>
           </div>
@@ -820,85 +921,76 @@
   </div>
 
   <script>
-    // Optional: hier ihren Namen eintragen, z.B. "Gessi"
+    // Optional: Name
     const herName = ""; // z.B. "Gessi"
 
     const slides = [
       {
-        // 1: Wie alles begonnen hat – Ferien + 2 Wochen schreiben + von Anfang an richtig
         title: "Wie alles ahgfange hat",
         text: "Mir hend eus genau i dem Moment kenneglernt, wo du id Ferie gange bisch. Und trotzdem – mir beidi hend zwei Wuche lang jede einzelni Tag mitenand gschriebe. Von Ahfang ah, isch das Gfühl da gsi, dass das zwüsched eus öppis ganz bsundrigs isch. Ich han nur so sehr ghofft, dass du au so fühlsch.",
         note: "Damals hät ich nie denkt, wie wichtig du mir mal sii wirsch.",
         emoji: "✨",
         image: "",
-        extraImage: "https://syna.ch/images/easyblog_articles/2464/b2ap3_amp_S5_AdobeStock_146303559.jpeg"
+        extraImage: ""
       },
       {
-        // 2: Erstes Treffen + Kuss + alles richtig
         title: "Eusi ersti Äbige zeme",
-        text: "Chuum bisch du zrugg id Schwiiz glandet, scho hend mir eus troffe. Keis langs Zögere, keis Abwarte. Am ersten Abig isch scho en Kuss gfalle – und wieder isch die Verbindig so düütlich z'spüre gsi. Ide folgende Täg isch es so gsi, als wür öppis, wo längst da gsi isch, endlich en Platz becho. Alles isch so zwanglos gs und vertraut. Es hat sich sofort richtig ahgfühlt, als wür ich dich scho ewig kenne – als wärsch du scho immer a minere Siite gsi.",
+        text: "Chuum bisch du zrugg id Schwiiz glandet, scho hend mir eus troffe. Keis langs Zögere, keis Abwarte. Am ersten Abig isch scho en Kuss gfalle – und wieder isch die Verbindig so düütlich z'spüre gsi. Ide folgende Täg isch es so gsi, als wür öppis, wo längst da gsi isch, endlich en Platz becho. Alles isch so zwanglos gs und vertraut. Es het sich sofort richtig ahgfühlt, als wür ich dich scho ewig kenne – als wärsch du scho immer a minere Siite gsi.",
         note: "Ich weiss no ganz genau, wie sich das alles ahgfühlt hat.",
         emoji: "💫",
         image: "",
-        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_00000000955071f499a98640a0a02819&ts=489669&p=fs&cid=1&sig=8c786144338e1501863314eb63ff1321a1923d0ce7cef431bcc687375768a3b8&v=0"
+        extraImage: ""
       },
       {
-        // 3: Lieblingsmoment – Ruhe, Nähe, Lachen
         title: "Mini Lieblingsmoment mit dir",
         text: "Es gitt so viel Momente, wo ich mit dir liebe. Eigentlich alli, woni a dinere Siite dörf si. Aber ein Moment sticht bsundrigs use: Das Gfühl vo Rueh, Nöchi und Lache, wenn mir eifach elei sind – ohni Programm, ohni Druck. Mit dir chönd sogar ganz normali Äbige de schönste Ort uf de Welt sii.",
         note: "Du bedütisch mir meh, als ich je in Wort fasse chan.",
         emoji: "🌙",
         image: "",
-        extraImage: "https://sdmntprukwest.oaiusercontent.com/files/00000000-1d8c-6243-9512-09eb1179bda0/raw?se=2025-11-10T22%3A46%3A23Z&sp=r&sv=2024-08-04&sr=b&scid=21eb8527-db36-4054-8a8f-b3ca5610fc9c&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-10T02%3A57%3A56Z&ske=2025-11-11T02%3A57%3A56Z&sks=b&skv=2024-08-04&sig=QvxsamXJHyMRH%2BDcdIpbtIpcRSYexhIINiSc%2BCMcs4M%3D"
+        extraImage: ""
       },
       {
-        // 4: Was er an ihr bewundert
         title: "Was ich a dir bewundere",
         text: "Ich bewundere dini iifühlsami Art und dass du immer d'Nöchi zu mir suechsch. Dass du immer wieder d'Chraft findsch, für mich da z'sii – sogar dänn, wenn du es selber extrem stressig hesch. Ich liebe alles an dir: Dis Lache, dini Auge, dini Ahweseheit, aber ganz bsundrigs dis guete Herz.",
-        note: "Du gsehsch oft gar nicht, wie viel Liecht du i mis Lebe bringsch. Ich chan dir nöd gnueg defür danke.",
+        note: "Du gsehsch oft gar nöd, wie viel Liecht du i mis Läbe bringsch. Ich chan dir nöd gnueg defür danke.",
         emoji: "💖",
         image: "",
-        extraImage: "https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-8600-620e-8f87-e90edc6d684a/raw?se=2025-11-10T22%3A46%3A05Z&sp=r&sv=2024-08-04&sr=b&scid=f24e7979-c372-4fcb-a3cc-63681dd8c922&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-09T23%3A15%3A20Z&ske=2025-11-10T23%3A15%3A20Z&sks=b&skv=2024-08-04&sig=Nsr53wf5ZtB/9AOuJ8gSdBMj7qzlW%2BOS9QjZPiE6T0M%3D"
+        extraImage: ""
       },
       {
-        // 5: Wie ich mich mit dir fühle – angekommen, Safe Space
         title: "Wie ich mich mit dir fühle",
         text: "Mit dir fühle ich mich gseh. Ich weiss, ich bin endlich ahcho. Du gisch mir das Gfühl, dass ich genau richtig so bin, wie ich bin – und das isch selte und kostbar. Du bisch min Safe Space, egal wo mir sind.",
         note: "Bi dir chan ich eifach ich selber sii.",
         emoji: "🤍",
         image: "",
-        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_000000002be8720a81adb9580e610a78&ts=489670&p=fs&cid=1&sig=93a21040a96aa67337ff6792a3ce5f337eeea6ff540173ea46c28782d1e05a04&v=0"
+        extraImage: ""
       },
       {
-        // 6: Wenn du nicht bei mir bist – getrennte Wohnungen, Vermissen
         title: "Wenn du nöd bi mir bisch",
         text: "Au wenn mir no getrennt wohned, so fühlt es sich für mich oft so an, als wär min Platz immer det, wo du bisch. Ich liide, wenn du nöd bi mir bisch. Ich vermisse dich extrem und würd dich am liebste immer bi mir hab. D'Äbige sind nur halb so hell, wenn du nöd bi mir bisch – weil en Teil vo mir immer bi dir isch.",
         note: "Mis Herz isch bi dir, au wenn mir grad nöd am gliche Ort sind.",
         emoji: "🌙",
         image: "",
-        extraImage: "https://sdmntprcentralus.oaiusercontent.com/files/00000000-530c-61f5-bbe2-905a2435484b/raw?se=2025-11-10T22%3A46%3A05Z&sp=r&sv=2024-08-04&sr=b&scid=f24e7979-c372-4fcb-a3cc-63681dd8c922&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-09T23%3A12%3A42Z&ske=2025-11-10T23%3A12%3A42Z&sks=b&skv=2024-08-04&sig=AdcR2i%2B6%2Bued6o97ApFfoBRjIRT4Q/bXOY/6I5A4g7I%3D"
+        extraImage: ""
       },
       {
-        // 7: Gespräche, die Liebe nähren + Rituale
         title: "Gmeinsam wachse",
         text: "Ich setze alles daran, mit dir z'wachse. Eusi Gspröch nähred eusi Liebi – au dänn, wenn's mal nöd eifach isch. Mir rede, wil uns s'«mir» wichtig isch. Und ich liebe es, wie mir eus jede Abig guet Nacht wünsche und jede Morge als erscht grüessed. Die chliine Rituale sind wie Gschützboge ume üsne Tag ume.",
-        note: "Mit dir fühlt sich Wachsum nöd no chrampfe aa, sondern no Gmeinsamkeit.",
+        note: "Mit dir fühlt sich Wachsum nöd nach Chrampf a, sondern nach Gmeinsamkeit.",
         emoji: "🌱",
         image: "",
-        extraImage: "https://sdmntprcentralus.oaiusercontent.com/files/00000000-1058-61f5-a985-1e4a5ab99959/raw?se=2025-11-10T22%3A47%3A26Z&sp=r&sv=2024-08-04&sr=b&scid=d16d512c-e7e3-4a7e-b631-1392c1a2c77d&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-09T23%3A12%3A42Z&ske=2025-11-10T23%3A12%3A42Z&sks=b&skv=2024-08-04&sig=/Ubm7zVJBNLLLmLel3VhfBFKPR0lZ5GgE9VP840BEK8%3D"
+        extraImage: ""
       },
       {
-        // 8: Was ich dir sagen möchte – inkl. Heirats-Gedanke
         title: "Was ich dir unbedingt säge wött",
         text: "All das da isch nur en chline Versuech, dir z'zeige, was i Wort eigentlich fasch nöd Platz findet: wie wichtig du mir bisch. Wie dankbar ich bi, dass es dich i mim Läbe git. Eusi Verbindig, eusi Gspröch, eusi Nöchi – das alles isch nöd selbstverständlich. Tief i mir inne weiss ich, dass du di Richtigi für mich bisch. Und ich weiss, dass ich dich einisch heirate werde.",
         note: "Es git drü Wort, woni dir vo Härze wott säge.",
         emoji: "💌",
         image: "",
-        extraImage: "https://chatgpt.com/backend-api/estuary/content?id=file_00000000aaac71f48cbd334c7ea7c7d9&ts=489670&p=fs&cid=1&sig=e6ea55e94f0e96457521c4bbf2e4b9de13a1594098dc152f7d9565a132fb59ca&v=0"
+        extraImage: ""
       }
     ];
 
-    const avatarEmojiEl   = document.getElementById("avatarEmoji");
     const panel           = document.getElementById("panel");
     const panelChapterEl  = document.getElementById("panelChapter");
     const panelStepTextEl = document.getElementById("panelStepText");
@@ -908,9 +1000,9 @@
     const panelTextEl     = document.getElementById("panelText");
     const panelNoteEl     = document.getElementById("panelNote");
     const panelExtraImageEl = document.getElementById("panelExtraImage");
+    const progressFillEl  = document.getElementById("progressFill");
 
     const dotsContainer   = document.getElementById("dotsContainer");
-
     const prevBtn         = document.getElementById("prevBtn");
     const nextBtn         = document.getElementById("nextBtn");
 
@@ -951,6 +1043,13 @@
       }
     }
 
+    function updateProgress() {
+      const totalSteps = slides.length + 1; // + Finale
+      const step = currentIndex + 1;
+      const percent = (step / totalSteps) * 100;
+      progressFillEl.style.width = `${percent}%`;
+    }
+
     function showSlide(index) {
       const slide = slides[index];
       if (!slide) return;
@@ -960,13 +1059,12 @@
       panel.classList.add("panel-animated");
 
       panelChapterEl.textContent  = index + 1;
-      panelStepTextEl.textContent = `Seite ${index + 1} von ${slides.length}`;
+      panelStepTextEl.textContent = "";
 
       panelHeadlineEl.textContent = slide.title;
       panelTextEl.textContent     = slide.text;
       panelNoteEl.textContent     = slide.note || "";
 
-      // Hauptbild / Emoji
       if (slide.image) {
         panelImageEl.src = slide.image;
         panelImageEl.style.display = "block";
@@ -977,7 +1075,6 @@
         panelImageEl.style.display = "none";
       }
 
-      // Extra-Bild unten, clean
       if (slide.extraImage) {
         panelExtraImageEl.src = slide.extraImage;
         panelExtraImageEl.style.display = "block";
@@ -987,6 +1084,7 @@
 
       updateDots();
       updateButtons();
+      updateProgress();
     }
 
     function openFinale() {
@@ -1003,7 +1101,6 @@
     }
 
     function playHeartTransition(targetIndex) {
-      // Herz kurz anzeigen
       transitionHeart.classList.remove("show");
       void transitionHeart.offsetWidth;
       transitionHeart.classList.add("show");
@@ -1011,7 +1108,7 @@
       setTimeout(() => {
         currentIndex = targetIndex;
         showSlide(currentIndex);
-      }, 550);
+      }, 1000);
     }
 
     prevBtn.addEventListener("click", () => {
