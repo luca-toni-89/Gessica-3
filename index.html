@@ -140,7 +140,7 @@
         0 26px 60px rgba(15, 23, 42, 0.95),
         0 0 0 1px rgba(248, 250, 252, 0.08);
       backdrop-filter: blur(18px);
-      overflow: hidden; /* wichtig fürs Clippen der Herzen */
+      overflow: hidden;
     }
 
     .card::before {
@@ -325,8 +325,6 @@
       border-radius: 999px;
       background: rgba(15,23,42,0.6);
       overflow: hidden;
-
-      /* Neon-Rand (statisch) */
       box-shadow:
         0 0 0 1px rgba(236,72,153,0.8),
         0 0 12px rgba(236,72,153,0.7),
@@ -335,25 +333,21 @@
     }
 
     .progress-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 0%;
-  border-radius: inherit;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #fecaca, #fb7185);
+      box-shadow:
+        0 0 10px rgba(236,72,153,0.9),
+        0 0 22px rgba(251,113,133,0.9),
+        0 0 40px rgba(236,72,153,0.9),
+        0 0 70px rgba(236,72,153,0.8);
+      transition: width 0.5s ease-out;
+    }
 
-  /* weicher, homogener Verlauf ohne harte Kanten */
-  background: linear-gradient(90deg, #fecaca, #fb7185);
-  /* keine Wiederholung / kein background-size mehr */
-
-  box-shadow:
-    0 0 10px rgba(236,72,153,0.9),
-    0 0 22px rgba(251,113,133,0.9),
-    0 0 40px rgba(236,72,153,0.9),
-    0 0 70px rgba(236,72,153,0.8);
-
-  transition: width 0.5s ease-out;
-}
     .panel-main {
       display: grid;
       grid-template-columns: 110px 1fr;
@@ -434,26 +428,41 @@
       margin-top: 6px;
     }
 
-    /* Extra-Bild, clean */
-    .panel-extra-image {
-  display: none;
-  margin-top: 10px;
-  max-width: 100%;
-  max-height: 220px;
-  object-fit: cover;
+    /* Extra-Bild im selben Rahmen wie oben */
+    .panel-extra {
+      margin-top: 12px;
+      border-radius: 18px;
+      padding: 3px;
+      background: conic-gradient(
+        from 220deg,
+        rgba(236,72,153,0.9),
+        rgba(248,113,113,0.9),
+        rgba(96,165,250,0.9),
+        rgba(236,72,153,0.9)
+      );
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.85);
+      overflow: hidden;
+    }
 
-  /* 🌸 Soft Fade nach aussen */
-  mask-image: radial-gradient(
-    circle,
-    rgba(0,0,0,1) 60%,
-    rgba(0,0,0,0) 100%
-  );
-  -webkit-mask-image: radial-gradient(
-    circle,
-    rgba(0,0,0,1) 60%,
-    rgba(0,0,0,0) 100%
-  );
-}
+    .panel-extra-inner {
+      position: relative;
+      border-radius: 14px;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .panel-extra-image {
+      display: none;
+      width: 100%;
+      height: 100%;
+      max-height: 260px;
+      object-fit: cover;
+      border-radius: 14px;
+    }
 
     /* Dots */
     .dots {
@@ -887,8 +896,12 @@
                 Zusatz
               </div>
 
-              <!-- cleanes Kapitelbild -->
-              <img id="panelExtraImage" class="panel-extra-image" alt="Kapitelbild" />
+              <!-- Kapitelbild im gleichen Rahmen wie oben -->
+              <div class="panel-extra">
+                <div class="panel-extra-inner">
+                  <img id="panelExtraImage" class="panel-extra-image" alt="Kapitelbild" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
